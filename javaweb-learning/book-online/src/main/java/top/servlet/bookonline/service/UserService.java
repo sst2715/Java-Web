@@ -11,4 +11,10 @@ public interface UserService {
      * @return user
      */
     User signIn(String account, String password);
+
+    User findByAccount(String account);
+
+    void register(User newUser);
+
+    String hashPassword(String password);
 }

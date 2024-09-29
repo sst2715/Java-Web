@@ -19,4 +19,7 @@ public interface UserDao {
      * @return
      */
     User findUser(User userDto);
+
+    // 通过账号查找用户（用于注册时判断用户是否已存在）
+    User findByAccount(String account);
 }

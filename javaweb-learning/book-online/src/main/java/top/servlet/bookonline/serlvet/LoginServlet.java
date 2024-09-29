@@ -13,7 +13,7 @@ import top.servlet.bookonline.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 
-@WebServlet("/login")
+@WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
     private UserService userService;
     public void  init(ServletConfig config) throws ServletException {
@@ -23,13 +23,17 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String account=req.getParameter("account");
         String password=req.getParameter("password");
+        if (account == null || password == null || password.trim().isEmpty()) {
+            resp.setContentType("text/html;charset=UTF-8");
+            resp.getWriter().write("<script>alert('账户和密码不能为空');location.href='/login';</script>");
+            return;
+        }
 
         User user =userService.signIn(account, password);
         if(user != null){
 
             HttpSession session = req.getSession();
             session.setAttribute("user",user);
-
             resp.sendRedirect("/index");
         } else {
 

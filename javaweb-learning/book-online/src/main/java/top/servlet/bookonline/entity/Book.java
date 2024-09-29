@@ -14,4 +14,5 @@ public class Book {
     private String name;
     private String cover;
     private String author;
+    private String introduce;
 }

@@ -90,7 +90,9 @@
                 </div>
                 <div class="col-6">
                     <p style="color: #bdbdbd">${book.author}</p>
+                    <p style="color: #000000">${book.introduce}</p>
                 </div>
+
             </div>
         </div>
         <div class="col-4">
