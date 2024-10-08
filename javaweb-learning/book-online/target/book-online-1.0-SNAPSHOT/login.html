@@ -39,7 +39,7 @@
             top: 50%;
             left: 50%;
             width: 450px;
-            height: 300px;
+            height: 350px;
             margin-left: -225px;
             margin-top: -150px;
         }
@@ -146,6 +146,10 @@
         .icon-box i {
             flex: 0 0 33%;
         }
+        .remember-box{
+            width:70%;
+            display: flex;
+        }
     </style>
 </head>
 <body>
@@ -162,15 +166,23 @@
         </div>
         <div>
             <label>
-                <input type="text" name="account" class="input-box" placeholder="手机号/邮箱">
+                <input type="text" name="account" class="input-box" placeholder="手机号/邮箱" id="username">
             </label>
         </div>
         <div>
             <label>
-                <input type="password" name="password" class="input-box" placeholder="密码">
+                <input type="password" name="password" class="input-box" placeholder="密码" id="password">
             </label>
         </div>
+        <img src="/generateCaptcha" alt="验证码" id="captchaImage" onclick="this.src='/generateCaptcha?' + Math.random();" />
+        <input type="text" name="captcha" placeholder="请输入验证码" required>
         <div>
+            <div class="remember-box">
+                <p style="margin-right: 6px">记住我</p>
+                <label>
+                    <input type="checkbox" id="remember" name="remember">
+                </label>
+            </div>
             <label>
                 <input type="submit" value="立即登录" class="btn">
             </label>
@@ -188,4 +200,38 @@
     </form>
 </div>
 </body>
+<script>
+    // 页面加载时执行
+    window.onload = function () {
+        let username = document.getElementById("username");
+        let password = document.getElementById("password");
+
+        // 检查 Cookie 并填充输入框
+        username.value = getCookie("username"); // 注意这里是 "username" 而不是 "account"
+        password.value = getCookie("password");
+    };
+
+    let remember = document.getElementById("remember");
+    remember.onclick = function () {
+        if (remember.checked) {
+            let username = document.getElementById("username");
+            let password = document.getElementById("password");
+            username.value = getCookie("username");
+            password.value = getCookie("password");
+        }
+    };
+
+    function getCookie(name) {
+        const keyName = name + "=";
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const value = cookies[i].trim();
+            if (value.indexOf(keyName) === 0) {
+                return value.substring(keyName.length, value.length);
+            }
+        }
+        return "";
+    }
+</script>
+
 </html>

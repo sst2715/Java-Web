@@ -25,11 +25,14 @@ public class RegisterServlet extends HttpServlet {
         String account = req.getParameter("account");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
+        String inputCaptcha = req.getParameter("captcha");
+        String sessionCaptcha = (String) req.getSession().getAttribute("captcha");
 
         // 检查输入是否为空或空字符串
         if (account == null || account.trim().isEmpty() ||
                 password == null || password.trim().isEmpty() ||
-                confirmPassword == null || confirmPassword.trim().isEmpty()) {
+                confirmPassword == null || confirmPassword.trim().isEmpty() ||
+                inputCaptcha == null || inputCaptcha.trim().isEmpty()) {
             resp.setContentType("text/html;charset=UTF-8");
             resp.getWriter().write("<script>alert('所有字段都是必填的');location.href='/register';</script>");
             return;
@@ -39,6 +42,13 @@ public class RegisterServlet extends HttpServlet {
         if (!password.equals(confirmPassword)) {
             resp.setContentType("text/html;charset=UTF-8");
             resp.getWriter().write("<script>alert('两次密码输入不一致');location.href='/register';</script>");
+            return;
+        }
+
+        // 验证码校验
+        if (sessionCaptcha == null || !sessionCaptcha.equalsIgnoreCase(inputCaptcha)) {
+            resp.setContentType("text/html;charset=UTF-8");
+            resp.getWriter().write("<script>alert('验证码错误');location.href='/register';</script>");
             return;
         }
 
@@ -53,7 +63,7 @@ public class RegisterServlet extends HttpServlet {
         // 创建并保存用户
         User newUser = new User();
         newUser.setAccount(account);
-        newUser.setPassword(userService.hashPassword(password));  // 使用 UserServiceImpl 的 hashPassword 方法加密密码
+        newUser.setPassword(userService.hashPassword(password));
 
         userService.register(newUser);
 
@@ -63,7 +73,6 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 直接返回注册页面，通常应该是一个 JSP 或 HTML
         req.getRequestDispatcher("/register.html").forward(req, resp);
     }
 }
