@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="class01-servlet" />
         <module name="class04-cookie-session" />
+        <module name="brand-list" />
         <module name="class02-request" />
         <module name="class03-response" />
         <module name="book-online" />
