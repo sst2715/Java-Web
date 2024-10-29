@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>检查用户名是否可用</title>
+</head>
+<body>
+<div>
+    <label for="username">
+        用户名
+        <input type="text" name="username" value="admin" id="username" />
+    </label>
+    <span id="tip">显示注册结果</span>
+</div>
+</body>
+<script>
+    document.getElementById("username").onblur = function () {
+        //获取输入框用户输入 username 的值
+        const username = this.value;
+        //获得 span 标签展示注册结果
+        let tip = document.getElementById("tip");
+        //设置样式为行内展示
+        tip.style.display = "inline";
+        //向后端发起请求，判断用户名是否可以注册
+        let xHttp;
+        if (window.XMLHttpRequest) {
+            xHttp = new XMLHttpRequest();
+        } else {
+            xHttp = new ActiveXObject("Microsoft.XMLHTTP")
+        }
+        xHttp.open("GET", "http://localhost:8080/check?username=" + username)
+        xHttp.send()
+        xHttp.onreadystatechange = function () {
+            if (this.status === 200) {
+                if (this.responseText === "true") {
+                    tip.innerHTML = "用户名可用"
+                    tip.style.color = "green"
+                } else {
+                    tip.innerHTML = "用户名已存在"
+                    tip.style.color = "red"
+                }
+            }
+        }
+    }
+</script>
+</html>
